@@ -18,6 +18,10 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 
+def gen(num):
+    return set([(random.randrange(0, GRID_HEIGHT), random.randrange(0, GRID_WIDTH)) for _ in range(num)])
+
+
 def draw_grid(positions):
     for position in positions:
         col, row = position
