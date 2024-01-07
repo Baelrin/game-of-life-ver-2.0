@@ -1,4 +1,4 @@
-from turtle import pos, position
+import random
 import pygame
 
 pygame.init()
@@ -35,6 +35,7 @@ def draw_grid(positions):
 
 def main():
     running = True
+    playing = False
 
     positions = set()
     while running:
@@ -54,6 +55,17 @@ def main():
                     positions.remove(pos)
                 else:
                     positions.add(pos)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    playing = not playing
+
+                if event.key == pygame.K_c:
+                    positions = set()
+                    playing = False
+
+                if event.key == pygame.K_g:
+                    positions = gen(random.randrange(2, 5) * GRID_WIDTH)
 
         screen.fill(GREY)
         draw_grid(positions)
