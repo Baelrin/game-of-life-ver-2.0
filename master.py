@@ -37,6 +37,15 @@ def draw_grid(positions):
                              0), (col * TILE_SIZE, HEIGHT))
 
 
+def adjust_grid(positions):
+    all_neighbors = set()
+    new_positions = set()
+
+
+def get_neighbors(pos):
+    pass
+
+
 def main():
     running = True
     playing = False
@@ -69,7 +78,7 @@ def main():
                     playing = False
 
                 if event.key == pygame.K_g:
-                    positions = gen(random.randrange(2, 5) * GRID_WIDTH)
+                    positions = gen(random.randrange(4, 10) * GRID_WIDTH)
 
         screen.fill(GREY)
         draw_grid(positions)
