@@ -7,7 +7,7 @@ pygame.init()
 # Define common color constants
 BLACK = (0, 0, 0)
 GREY = (128, 128, 128)
-YELLOW = (255, 255, 0)
+MINT = (64, 224, 208)
 
 # Screen dimensions and properties
 WIDTH, HEIGHT = 800, 800
@@ -33,44 +33,37 @@ def gen(num):
 
 def draw_grid(positions):
     for position in positions:
-        col, row = position
-        top_left = (col * TILE_SIZE, row * TILE_SIZE)
-        pygame.draw.rect(screen, YELLOW, (*top_left, TILE_SIZE, TILE_SIZE))
+        pygame.draw.rect(
+            screen, MINT, (position[0] * TILE_SIZE, position[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE))
 
-    for row in range(GRID_HEIGHT):
-        pygame.draw.line(screen, BLACK, (0, row * TILE_SIZE),
-                         (WIDTH, row * TILE_SIZE))
+    horizontal_lines = [((0, row * TILE_SIZE), (WIDTH, row * TILE_SIZE))
+                        for row in range(GRID_HEIGHT)]
+    vertical_lines = [((col * TILE_SIZE, 0), (col * TILE_SIZE, HEIGHT))
+                      for col in range(GRID_WIDTH)]
 
-        for col in range(GRID_WIDTH):
-            pygame.draw.line(screen, BLACK, (col * TILE_SIZE,
-                             0), (col * TILE_SIZE, HEIGHT))
+    for start, end in horizontal_lines + vertical_lines:
+        pygame.draw.line(screen, BLACK, start, end)
 
 # Function to adjust the grid based on the game rules
 
 
 def adjust_grid(positions):
-    all_neighbors = set()
-    new_positions = set()
+    new_positions = positions.copy()
 
-    for position in positions:
+    # Positions that need to be checked
+    to_check = positions.union(*[get_neighbors(p) for p in positions])
+
+    # Check each position, and apply the rules
+    for position in to_check:
         neighbors = get_neighbors(position)
-        all_neighbors.update(neighbors)
+        alive_neighbors = len([n for n in neighbors if n in positions])
 
-        # Filter the neighbors to include only those in positions
-        neighbors = list(filter(lambda x: x in positions, neighbors))
-
-        # Rules to maintain current position
-        if len(neighbors) in [2, 3]:
-            new_positions.add(position)
-
-    # Check all neighboring positions
-    for position in all_neighbors:
-        neighbors = get_neighbors(position)
-        neighbors = list(filter(lambda x: x in positions, neighbors))
-
-        # Rule for empty position to become filled
-        if len(neighbors) == 3:
-            new_positions.add(position)
+        if position in positions:
+            if alive_neighbors not in [2, 3]:
+                new_positions.discard(position)
+        else:
+            if alive_neighbors == 3:
+                new_positions.add(position)
 
     return new_positions
 
