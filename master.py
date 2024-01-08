@@ -18,7 +18,11 @@ clock = pygame.time.Clock()
 
 
 def gen(num):
-    return {(random.randrange(0, GRID_HEIGHT), random.randrange(0, GRID_WIDTH)) for _ in range(num)}
+    positions = []
+    for _ in range(num):
+        positions.append((random.randrange(0, GRID_HEIGHT),
+                         random.randrange(0, GRID_WIDTH)))
+    return set(positions)
 
 
 def draw_grid(positions):
@@ -37,7 +41,7 @@ def draw_grid(positions):
 
 def adjust_grid(positions):
     new_positions = positions.copy()
-    to_check = positions.union(*[get_neighbors(p) for p in positions])
+    to_check = positions | set().union(*[get_neighbors(p) for p in positions])
 
     for position in to_check:
         neighbors = get_neighbors(position)
@@ -55,8 +59,11 @@ def adjust_grid(positions):
 
 def get_neighbors(pos):
     x, y = pos
-    neighbors = [(x + dx, y + dy) for dx in [-1, 0, 1] for dy in [-1, 0, 1] if (dx, dy)
-                 != (0, 0) and 0 <= x + dx < GRID_WIDTH and 0 <= y + dy < GRID_HEIGHT]
+    neighbors = []
+    for dx in [-1, 0, 1]:
+        for dy in [-1, 0, 1]:
+            if (dx, dy) != (0, 0) and 0 <= x + dx < GRID_WIDTH and 0 <= y + dy < GRID_HEIGHT:
+                neighbors.append((x + dx, y + dy))
     return neighbors
 
 
