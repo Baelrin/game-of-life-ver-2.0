@@ -72,15 +72,9 @@ def adjust_grid(positions):
 
 def get_neighbors(pos):
     x, y = pos
-    neighbors = []
-    for dx in [-1, 0, 1]:
-        if 0 <= x + dx < GRID_WIDTH:
-            for dy in [-1, 0, 1]:
-                if 0 <= y + dy < GRID_HEIGHT:
-                    if not (dx == 0 and dy == 0):
-                        neighbors.append((x + dx, y + dy))
+    neighbors = [(x + dx, y + dy) for dx in [-1, 0, 1] for dy in [-1, 0, 1] if (dx, dy)
+                 != (0, 0) and 0 <= x + dx < GRID_WIDTH and 0 <= y + dy < GRID_HEIGHT]
     return neighbors
-
 # Main function where the game loop resides
 
 
