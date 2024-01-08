@@ -89,50 +89,33 @@ def main():
     while running:
         clock.tick(FPS)
 
-        # Update the count if the game is in playing mode
         if playing:
             count += 1
+            if count >= update_freq:
+                count = 0
+                positions = adjust_grid(positions)
 
-        # Update the game state based on count and playing state
-        if count >= update_freq:
-            count = 0
-            positions = adjust_grid(positions)
-
-        # Set the window title based on the game state
         pygame.display.set_caption('Playing' if playing else 'Paused')
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+            match event.type:
+                case pygame.QUIT:
+                    running = False
+                case pygame.MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    pos = (x // TILE_SIZE, y // TILE_SIZE)
+                    positions ^= {pos}  # Toggle using symmetric difference
+                case pygame.KEYDOWN:
+                    match event.key:
+                        case pygame.K_SPACE:
+                            playing = not playing
+                        case pygame.K_c:
+                            positions = set()
+                            playing = False
+                            count = 0
+                        case pygame.K_g:
+                            positions |= gen(random.randint(4, 9) * GRID_WIDTH)
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                col = x // TILE_SIZE
-                row = y // TILE_SIZE
-                pos = (col, row)
-
-                # Toggle the position in the set upon mouse click
-                if pos in positions:
-                    positions.remove(pos)
-                else:
-                    positions.add(pos)
-
-            if event.type == pygame.KEYDOWN:
-                # Toggle playing state with the space key
-                if event.key == pygame.K_SPACE:
-                    playing = not playing
-
-                # Clear the grid and pause game with 'c' key
-                if event.key == pygame.K_c:
-                    positions = set()
-                    playing = False
-                    count = 0
-
-                # Generate random positions with 'g' key
-                if event.key == pygame.K_g:
-                    positions = gen(random.randrange(4, 10) * GRID_WIDTH)
-
-        # Draw the background and grid
         screen.fill(GREY)
         draw_grid(positions)
         pygame.display.update()
