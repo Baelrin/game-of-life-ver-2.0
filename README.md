@@ -50,7 +50,7 @@ Explain how to run the automated tests for this system.
 
 ## Authors
 
-- **Baelrin** - _Initial work_ - [Baelrin](https://github.com/Baelrin)
+- **Baelrin** - _Game of Life_ - [Baelrin](https://github.com/Baelrin)
 
 See also the list of [contributors](https://github.com/Baelrin/game-of-life-ver-2.0/contributors) who participated in this project.
 
