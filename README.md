@@ -1,4 +1,4 @@
-````markdown
+
 # Game of Life v2.0
 
 This project is an implementation of the Game of Life, a cellular automaton devised by the British mathematician John Horton Conway. The game is a zero-player game, meaning that its evolution is determined by its initial state, requiring no further input.
