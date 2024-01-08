@@ -19,8 +19,6 @@ You can install Pygame using pip:
 ```bash
 pip install pygame
 ```
-````
-
 ### Installing
 
 Clone the repository:
