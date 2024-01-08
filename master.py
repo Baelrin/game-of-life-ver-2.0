@@ -1,23 +1,28 @@
 import random
 import pygame
 
+# Initialize Pygame
 pygame.init()
 
+# Define colors
 BLACK = (0, 0, 0)
 GREY = (128, 128, 128)
 MINT = (64, 224, 208)
 
+# Set window size and tile size
 WIDTH, HEIGHT = 800, 800
 TILE_SIZE = 20
 GRID_WIDTH = WIDTH // TILE_SIZE
 GRID_HEIGHT = HEIGHT // TILE_SIZE
 FPS = 60
 
+# Create display surface
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 
 def gen(num):
+    """Generate a set of random positions"""
     positions = []
     for _ in range(num):
         positions.append((random.randrange(0, GRID_HEIGHT),
@@ -26,10 +31,12 @@ def gen(num):
 
 
 def draw_grid(positions):
+    """Draw the grid on the screen"""
     for position in positions:
         pygame.draw.rect(
             screen, MINT, (position[0] * TILE_SIZE, position[1] * TILE_SIZE, TILE_SIZE, TILE_SIZE))
 
+    # Draw horizontal and vertical lines
     horizontal_lines = [((0, row * TILE_SIZE), (WIDTH, row * TILE_SIZE))
                         for row in range(GRID_HEIGHT)]
     vertical_lines = [((col * TILE_SIZE, 0), (col * TILE_SIZE, HEIGHT))
@@ -40,6 +47,7 @@ def draw_grid(positions):
 
 
 def adjust_grid(positions):
+    """Adjust the grid according to the Game of Life rules"""
     new_positions = positions.copy()
     to_check = positions | set().union(*[get_neighbors(p) for p in positions])
 
@@ -58,6 +66,7 @@ def adjust_grid(positions):
 
 
 def get_neighbors(pos):
+    """Get the neighbors of a given position"""
     x, y = pos
     neighbors = []
     for dx in [-1, 0, 1]:
@@ -68,6 +77,7 @@ def get_neighbors(pos):
 
 
 def main():
+    """Main game loop"""
     running = True
     playing = False
     count = 0
